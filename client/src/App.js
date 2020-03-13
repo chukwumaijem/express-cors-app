@@ -7,6 +7,10 @@ import './App.css';
 const baseURL = 'http://localhost:5000';
 
 function App() {
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+
   const makePost = async () => {
     const data = {
       id: random.uuid(),
@@ -21,8 +25,35 @@ function App() {
     }
   };
 
-  const makeGet = () => { };
-  const makePut = () => { };
+  const makeGet = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/`);
+      const { data: { data } } = response;
+      console.log('====data===', data);
+
+      return data;
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  };
+
+  const makePut = async () => {
+    const data = await makeGet();
+
+    const ids = Object.keys(data);
+    const id = getRandomInt(ids.length);
+    
+    try {
+      const data = {
+        name: `${name.firstName()} ${name.lastName()}`,
+      };
+
+      await axios.put(`${baseURL}/${id}`, data);
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  };
+
   const makeDelete = () => { };
 
   return (

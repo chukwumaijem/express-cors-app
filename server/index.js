@@ -15,12 +15,21 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', (req, res) => {
-  res.json(db.find());
+  const data = db.getData('/')
+
+  res.json({  data });
 });
 
 app.post('/', (req, res) => {
-  db.push('data', req.body);
+  db.push(`/${req.body.id}`, req.body);
   db.save();
+
+  res.json({ ok: true });
+});
+
+app.put('/:id', (req, res) => {
+  const { id } = req.params;
+  console.info('===id===', id);
 
   res.json({ ok: true });
 });
