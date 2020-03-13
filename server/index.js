@@ -9,27 +9,34 @@ const PORT = 5000;
 
 app.use(express.json());
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from or * to allow all
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
 });
 
 app.get('/', (req, res) => {
   const data = db.getData('/')
 
-  res.json({  data });
+  res.json({ data });
 });
 
 app.post('/', (req, res) => {
   db.push(`/${req.body.id}`, req.body);
-  db.save();
 
   res.json({ ok: true });
 });
 
 app.put('/:id', (req, res) => {
   const { id } = req.params;
-  console.info('===id===', id);
+  db.push(`/${id}`, req.body, false)
+
+  res.json({ ok: true });
+});
+
+app.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  db.delete(`/${id}`)
 
   res.json({ ok: true });
 });

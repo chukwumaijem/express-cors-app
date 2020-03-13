@@ -41,8 +41,9 @@ function App() {
     const data = await makeGet();
 
     const ids = Object.keys(data);
-    const id = getRandomInt(ids.length);
-    
+    const id = ids[getRandomInt(ids.length)];
+    if (!id) return;
+
     try {
       const data = {
         name: `${name.firstName()} ${name.lastName()}`,
@@ -54,7 +55,18 @@ function App() {
     }
   };
 
-  const makeDelete = () => { };
+  const makeDelete = async () => {
+    const data = await makeGet();
+    const ids = Object.keys(data);
+    const id = ids[getRandomInt(ids.length)];
+    if (!id) return;
+
+    try {
+      await axios.delete(`${baseURL}/${id}`);
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  };
 
   return (
     <div className="App">
